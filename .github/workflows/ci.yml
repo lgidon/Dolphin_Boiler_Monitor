@@ -3,7 +3,7 @@ name: CI (Lint & Test)
 
 on:
   push:
-    branches: ["dev"]
+    branches: ["Dev"]
 permissions:
   contents: write
   pull-requests: write
