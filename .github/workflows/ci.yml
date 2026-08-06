@@ -1,0 +1,39 @@
+# .github/workflows/ci.yml
+name: CI (Lint & Test)
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  lint-and-test:
+    name: Lint & Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: "latest"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Run Ruff Linter & Formatter Check
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Run Pytest with Coverage
+        run: uv run pytest
