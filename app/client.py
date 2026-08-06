@@ -11,9 +11,7 @@ class DolphinAPIError(Exception):
     """Custom exception for Dolphin API communication failures."""
 
 
-
 class DolphinClient:
-
     def __init__(
         self,
         base_url: str = settings.dolphin_base_url,
@@ -64,15 +62,15 @@ class DolphinClient:
                 ) from err
 
     async def get_main_screen_data(self) -> DolphinMainScreenResponse:
-            """Fetch current telemetry and status."""
-            raw_json = await self._post_command("getMainScreenData.php")
-            return DolphinMainScreenResponse.model_validate(raw_json)
+        """Fetch current telemetry and status."""
+        raw_json = await self._post_command("getMainScreenData.php")
+        return DolphinMainScreenResponse.model_validate(raw_json)
 
     # --- Power & Control Endpoints ---
 
     async def turn_on_manually(self, temperature: float) -> dict[str, Any]:
         """Turn the heater on manually targeting a specific temperature.
-        
+
         Endpoint: turnOnManually.php
         Returns: {"Success": "Done", "expectedEndTime": "HH:MM"}
         """
@@ -82,9 +80,8 @@ class DolphinClient:
 
     async def turn_off_manually(self) -> dict[str, Any]:
         """Turn the heater off manually.
-        
+
         Endpoint: turnOffManually.php
         Returns: {"Success": "Done"}
         """
         return await self._post_command("turnOffManually.php")
-        

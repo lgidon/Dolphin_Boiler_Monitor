@@ -17,9 +17,7 @@ async def async_client():
 @respx.mock
 async def test_api_turn_on_success(async_client: AsyncClient):
     respx.post("https://api.dolphinboiler.com/HA/V1/turnOnManually.php").mock(
-        return_value=Response(
-            200, json={"Success": "Done", "expectedEndTime": "14:15"}
-        )
+        return_value=Response(200, json={"Success": "Done", "expectedEndTime": "14:15"})
     )
 
     response = await async_client.post("/control/turn-on", json={"temperature": 55.0})

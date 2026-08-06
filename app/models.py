@@ -13,9 +13,7 @@ class Base(DeclarativeBase):
 class HeaterReading(Base):
     __tablename__ = "heater_readings"
 
-    id: Mapped[int] = mapped_column(
-        Integer, primary_key=True, autoincrement=True
-    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     timestamp: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, index=True
     )
@@ -34,14 +32,15 @@ class ReadingResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class DolphinMainScreenResponse(BaseModel):
     """Parses and validates telemetry from /getMainScreenData.php"""
-    
+
     # Map raw API key names to clean Pythonic attributes if desired
     current_temp: float = Field(..., alias="Temperature")
     target_temp: float | None = Field(None, alias="targetTemperature")
     is_heating: bool = Field(..., alias="Power")
-    
+
     # Capture local system timestamp when the response was received
     fetched_at: datetime = Field(default_factory=datetime.utcnow)
 

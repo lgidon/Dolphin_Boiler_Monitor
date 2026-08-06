@@ -12,7 +12,22 @@ async def test_get_main_screen_data_success():
     respx.post("https://api.dolphinboiler.com/HA/V1/getMainScreenData.php").mock(
         return_value=Response(
             200,
-            json={"dolphinPlus":"enabled","fixedTemperature":"OFF","Power":"OFF","Energy":0,"Temperature":46,"targetTemperature":None,"showerTemperature":[{"drop":1,"temp":41},{"drop":2,"temp":47},{"drop":3,"temp":53},{"drop":4,"temp":56},{"drop":5,"temp":59},{"drop":6,"temp":62}]},
+            json={
+                "dolphinPlus": "enabled",
+                "fixedTemperature": "OFF",
+                "Power": "OFF",
+                "Energy": 0,
+                "Temperature": 46,
+                "targetTemperature": None,
+                "showerTemperature": [
+                    {"drop": 1, "temp": 41},
+                    {"drop": 2, "temp": 47},
+                    {"drop": 3, "temp": 53},
+                    {"drop": 4, "temp": 56},
+                    {"drop": 5, "temp": 59},
+                    {"drop": 6, "temp": 62},
+                ],
+            },
         )
     )
 
@@ -62,18 +77,13 @@ async def test_live_dolphin_cloud_api():
     print(f"Heating:      {data.is_heating}")
     print("------------------------")
 
-
     assert isinstance(data, DolphinMainScreenResponse)
 
 
 @respx.mock
 async def test_turn_on_manually():
-    route = respx.post(
-        "https://api.dolphinboiler.com/HA/V1/turnOnManually.php"
-    ).mock(
-        return_value=Response(
-            200, json={"Success": "Done", "expectedEndTime": "13:08"}
-        )
+    route = respx.post("https://api.dolphinboiler.com/HA/V1/turnOnManually.php").mock(
+        return_value=Response(200, json={"Success": "Done", "expectedEndTime": "13:08"})
     )
 
     client = DolphinClient(
@@ -91,11 +101,12 @@ async def test_turn_on_manually():
     last_request = route.calls.last.request
     assert "temperature=50.0" in last_request.content.decode()
 
+
 @respx.mock
 async def test_turn_off_manually():
-    route = respx.post(
-        "https://api.dolphinboiler.com/HA/V1/turnOffManually.php"
-    ).mock(return_value=Response(200, json={"Success": "Done"}))
+    route = respx.post("https://api.dolphinboiler.com/HA/V1/turnOffManually.php").mock(
+        return_value=Response(200, json={"Success": "Done"})
+    )
 
     client = DolphinClient(
         base_url="https://api.dolphinboiler.com/HA/V1",
