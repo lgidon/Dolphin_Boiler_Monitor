@@ -3,9 +3,10 @@ name: CI (Lint & Test)
 
 on:
   push:
-    branches: ["main", "master"]
-  pull_request:
-    branches: ["main", "master"]
+    branches: ["dev"]
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   lint-and-test:
@@ -43,4 +44,13 @@ jobs:
           DOLPHIN_DEVICE_NAME: "ci-test-device"
         run: uv run pytest
 
+      - name: Merge dev into main
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout main
+          git merge --ff-only origin/dev
+          git push origin main
 
