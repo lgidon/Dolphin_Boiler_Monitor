@@ -27,10 +27,12 @@ dev = [
 asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = "."
+markers = ["live: integration tests hitting real Dolphin API hardware"]
 # -v: verbose output (lists each test function name)
+# -m "not live": automatically ignore live tests during standard pytest execution
 # --cov=app: measures code coverage for the app/ directory
 # --cov-report=term-missing: shows missing line numbers in the terminal output
-addopts = "-v --cov=app --cov-report=term-missing"
+addopts = "-v -m \"not live\" --cov=app --cov-report=term-missing"
 
 [tool.ruff.lint]
 # B008: Allow FastAPI Depends() calls in route parameters

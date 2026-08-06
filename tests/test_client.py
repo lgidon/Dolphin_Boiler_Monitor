@@ -62,6 +62,9 @@ async def test_get_main_screen_data_http_error():
 
 
 # --- Live API Test: Run against production backend ---
+# -- Will be skipped by default, since it uses real credentials ---
+# --- To run use: uv run pytest -m live  ---
+@pytest.mark.live
 async def test_live_dolphin_cloud_api():
     """Fetch real data from the live endpoint using credentials in .env."""
     client = DolphinClient()
