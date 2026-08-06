@@ -36,4 +36,11 @@ jobs:
           uv run ruff format --check .
 
       - name: Run Pytest with Coverage
+        env:
+          DOLPHIN_BASE_URL: "https://api.dolphinboiler.com/HA/V1"
+          DOLPHIN_EMAIL: "ci-test@example.com"
+          DOLPHIN_API_KEY: "dummy-ci-key-do-not-use"
+          DOLPHIN_DEVICE_NAME: "ci-test-device"
         run: uv run pytest
+
+
