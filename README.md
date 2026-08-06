@@ -36,6 +36,7 @@ The official Dolphin app comes with several notable limitations for home automat
 
 - **Package Management**: uv
 
+
 #### Project Structure
 
 ```
