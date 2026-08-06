@@ -3,6 +3,7 @@ import pytest
 import respx
 from httpx import Response
 from app.client import DolphinAPIError, DolphinClient
+from app.models import DolphinMainScreenResponse
 
 
 @respx.mock
@@ -10,11 +11,7 @@ async def test_get_main_screen_data_success():
     respx.post("https://api.dolphinboiler.com/HA/V1/getMainScreenData.php").mock(
         return_value=Response(
             200,
-            json={
-                "status": "success",
-                "temperature": 52.0,
-                "is_active": 1,
-            },
+            json={"dolphinPlus":"enabled","fixedTemperature":"OFF","Power":"OFF","Energy":0,"Temperature":46,"targetTemperature":None,"showerTemperature":[{"drop":1,"temp":41},{"drop":2,"temp":47},{"drop":3,"temp":53},{"drop":4,"temp":56},{"drop":5,"temp":59},{"drop":6,"temp":62}]},
         )
     )
 
@@ -26,8 +23,9 @@ async def test_get_main_screen_data_success():
     )
     data = await client.get_main_screen_data()
 
-    assert data["status"] == "success"
-    assert data["temperature"] == 52.0
+    assert data.current_temp == 46
+    assert data.is_heating == False
+    assert data.target_temp is None
 
 
 @respx.mock
@@ -53,9 +51,59 @@ async def test_live_dolphin_cloud_api():
     client = DolphinClient()
     data = await client.get_main_screen_data()
 
-    print(f"API Key = {client.api_key}")
-
     print("\n--- LIVE DOLPHIN API RESPONSE ---")
     print(data)
     print("---------------------------------")
-    assert isinstance(data, dict)
+
+    print("\n--- PARSED TELEMETRY ---")
+    print(f"Current Temp: {data.current_temp}°C")
+    print(f"Target Temp:  {data.target_temp}°C")
+    print(f"Heating:      {data.is_heating}")
+    print("------------------------")
+
+
+    assert isinstance(data, DolphinMainScreenResponse)
+
+
+@respx.mock
+async def test_turn_on_manually():
+    route = respx.post(
+        "https://api.dolphinboiler.com/HA/V1/turnOnManually.php"
+    ).mock(
+        return_value=Response(
+            200, json={"Success": "Done", "expectedEndTime": "13:08"}
+        )
+    )
+
+    client = DolphinClient(
+        base_url="https://api.dolphinboiler.com/HA/V1",
+        email="test@example.com",
+        api_key="mock-key",
+        device_name="device-1",
+    )
+
+    response = await client.turn_on_manually(temperature=50.0)
+
+    assert response["Success"] == "Done"
+    assert response["expectedEndTime"] == "13:08"
+
+    last_request = route.calls.last.request
+    assert "temperature=50.0" in last_request.content.decode()
+
+@respx.mock
+async def test_turn_off_manually():
+    route = respx.post(
+        "https://api.dolphinboiler.com/HA/V1/turnOffManually.php"
+    ).mock(return_value=Response(200, json={"Success": "Done"}))
+
+    client = DolphinClient(
+        base_url="https://api.dolphinboiler.com/HA/V1",
+        email="test@example.com",
+        api_key="mock-key",
+        device_name="device-1",
+    )
+
+    response = await client.turn_off_manually()
+
+    assert response["Success"] == "Done"
+    assert route.called
