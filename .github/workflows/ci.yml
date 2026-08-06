@@ -4,6 +4,18 @@ name: CI (Lint & Test)
 on:
   push:
     branches: ["dev"]
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
 permissions:
   contents: write
   pull-requests: write

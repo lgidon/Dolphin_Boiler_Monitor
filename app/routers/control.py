@@ -17,7 +17,10 @@ async def turn_on(
     payload: TurnOnRequest,
     client: DolphinClient = Depends(get_dolphin_client),
 ) -> TurnOnResponse:
-    """Turn on the boiler manually with a target temperature."""
+    """
+    Turn on the water heater with a set target.
+    Upon reaching the target, the water heater will be turned off.
+    """
     try:
         raw_response = await client.turn_on_manually(temperature=payload.temperature)
         return TurnOnResponse.model_validate(raw_response)
@@ -32,6 +35,10 @@ async def turn_on(
     "/turn-off",
     response_model=TurnOffResponse,
     summary="Turn heater off manually",
+    responses={
+        404: {"description": "No boiler data found"},
+        503: {"description": "Database unavailable"},
+    },
 )
 async def turn_off(
     client: DolphinClient = Depends(get_dolphin_client),
