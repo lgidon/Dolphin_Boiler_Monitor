@@ -43,10 +43,3 @@ jobs:
           DOLPHIN_API_KEY: "dummy-ci-key-do-not-use"
           DOLPHIN_DEVICE_NAME: "ci-test-device"
         run: uv run pytest
-
-      - name: Merge dev into main
-        if: success()
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git push origin dev:main
