@@ -75,8 +75,8 @@ async def test_live_dolphin_cloud_api():
     print("---------------------------------")
 
     print("\n--- PARSED TELEMETRY ---")
-    print(f"Current Temp: {data.current_temp} °C")
-    print(f"Target Temp:  {data.target_temp} °C")
+    print(f"Current Temp: {data.current_temp}°C")
+    print(f"Target Temp:  {data.target_temp}°C")
     print(f"Heating:      {data.is_heating}")
     print("------------------------")
 
