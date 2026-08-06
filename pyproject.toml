@@ -31,3 +31,7 @@ pythonpath = "."
 # --cov=app: measures code coverage for the app/ directory
 # --cov-report=term-missing: shows missing line numbers in the terminal output
 addopts = "-v --cov=app --cov-report=term-missing"
+
+[tool.ruff.lint]
+# B008: Allow FastAPI Depends() calls in route parameters
+ignore = ["B008"]

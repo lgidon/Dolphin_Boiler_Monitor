@@ -1,4 +1,6 @@
-from app.client import DolphinClient
+from sqlalchemy.exc import SQLAlchemyError
+
+from app.client import DolphinAPIError, DolphinClient
 from app.db import AsyncSessionLocal
 from app.models import HeaterReading
 
@@ -15,6 +17,6 @@ async def poll_heater_data():
             )
             session.add(reading)
             await session.commit()
-    except Exception as e:
+    except (DolphinAPIError, SQLAlchemyError) as e:
         # Add structured logging here
         print(f"Error polling Dolphin heater: {e}")

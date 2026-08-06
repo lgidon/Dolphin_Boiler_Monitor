@@ -1,5 +1,6 @@
 # app/routers/control.py
 from fastapi import APIRouter, Depends, HTTPException, status
+
 from app.client import DolphinAPIError, DolphinClient
 from app.dependencies import get_dolphin_client
 from app.schemas import TurnOffResponse, TurnOnRequest, TurnOnResponse

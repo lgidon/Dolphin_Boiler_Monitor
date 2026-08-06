@@ -2,6 +2,7 @@
 import pytest
 import respx
 from httpx import Response
+
 from app.client import DolphinAPIError, DolphinClient
 from app.models import DolphinMainScreenResponse
 

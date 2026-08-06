@@ -1,6 +1,8 @@
 # app/client.py
 from typing import Any
+
 import httpx
+
 from app.config import settings
 from app.models import DolphinMainScreenResponse
 
@@ -8,7 +10,6 @@ from app.models import DolphinMainScreenResponse
 class DolphinAPIError(Exception):
     """Custom exception for Dolphin API communication failures."""
 
-    pass
 
 
 class DolphinClient:
