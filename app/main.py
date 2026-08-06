@@ -9,6 +9,7 @@ from app.client import DolphinAPIError, DolphinClient
 from app.database import init_db
 from app.poller import poll_heater_data
 from app.routers.control import router as control_router
+from app.routers.telemetry import router as telemetry_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -72,3 +73,4 @@ Features:
 )
 
 app.include_router(control_router)
+app.include_router(telemetry_router)
