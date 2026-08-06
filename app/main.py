@@ -18,7 +18,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-async def background_polling_loop(interval_seconds: float = 10.0):
+async def background_polling_loop(interval_seconds: float = 120.0):
     client = DolphinClient()
     while True:
         try:
@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
     await init_db()
 
     # 2. Start background worker
-    polling_task = asyncio.create_task(background_polling_loop(interval_seconds=10.0))
+    polling_task = asyncio.create_task(background_polling_loop(interval_seconds=120.0))
 
     yield
 
@@ -54,6 +54,21 @@ async def lifespan(app: FastAPI):
         pass
 
 
-app = FastAPI(title="Dolphin Boiler Monitor API", lifespan=lifespan)
+app = FastAPI(
+    title="Dolphin Boiler Monitor API",
+    description="""
+A local API that stores historical Dolphin boiler data.
+
+Features:
+
+* Current boiler status
+* Historical temperature
+* Historical power usage
+* Boiler control
+* Statistics
+""",
+    version="0.1.0",
+    lifespan=lifespan,
+)
 
 app.include_router(control_router)
