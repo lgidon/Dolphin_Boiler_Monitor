@@ -1,11 +1,14 @@
-# Dolphin Boiler Monitor API
+![Dolphin Boiler Monitor](https://shieldcn.dev/header/gradient.svg?title=Dolphin+Boiler+Monitor&subtitle=A+lightweight+FastAPI+service+designed+to++collect+and+expose+telemetry+data+for+Dolphin+water+heater+controllers&logo=lu%3AHeater&logoColor=2a4b81&size=wide&mode=dark&font=geist)
+
 
 [![CI Pipeline](https://github.com/lgidon/Dolphin_Boiler_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/<lgidon/Dolphin_Boiler_Monitor/actions)
 [![Coverage Status](https://coveralls.io/repos/github/lgidon/Dolphin_Boiler_Monitor/badge.svg?branch=dev)](https://coveralls.io/github/lgidon/Dolphin_Boiler_Monitor?branch=dev)
+![Last commit](https://www.shieldcn.dev/github/last-commit/lgidon/Dolphin_Boiler_Monitor.svg?variant=secondary&size=xs&mode=light&theme=gray&font=geist)
+<picture><source media="(prefers-color-scheme: dark)" srcset="https://www.shieldcn.dev/github/license/lgidon/Dolphin_Boiler_Monitor.svg?variant=ghost&amp;size=xs&amp;mode=dark&amp;font=geist"><img alt="License" src="https://www.shieldcn.dev/github/license/lgidon/Dolphin_Boiler_Monitor.svg?variant=ghost&amp;size=xs&amp;mode=light&amp;font=geist"></picture>
+![Python versions](https://img.shields.io/badge/python-3.11%2B-blue)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![uv](https://img.shields.io/badge/uv-%23DE5FE9.svg?style=for-the-badge&logo=uv&logoColor=white)](https://github.com/astral-sh/uv)
 
-![image](https://img.shields.io/badge/MIT-green?style=for-the-badge)
-
-A lightweight, asynchronous FastAPI service designed to poll, record, and expose telemetry data for smart home heaters, complete with remote manual control capabilities.
 
 ## Why This Project Exists
 
