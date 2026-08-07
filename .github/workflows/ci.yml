@@ -1,5 +1,5 @@
 # .github/workflows/ci.yml
-name: CI (Lint & Test)
+name: CI (Lint & Test + Docker)
 
 on:
   push:
