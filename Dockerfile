@@ -8,8 +8,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Enable bytecode compilation and optimization
-ENV UV_COMPILE_BYTECODE=1 \
+# Explicitly set virtualenv destination and optimize compile step
+ENV UV_PROJECT_ENVIRONMENT="/app/.venv" \
+    UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy
 
 # Copy dependency specification files first for optimal layer caching
