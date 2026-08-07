@@ -1,5 +1,7 @@
 # Dolphin Boiler Monitor API
 
+[![CI Pipeline](https://github.com/lgidon/Dolphin_Boiler_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/<lgidon/Dolphin_Boiler_Monitor/actions)
+
 A lightweight, asynchronous FastAPI service designed to poll, record, and expose telemetry data for smart home heaters, complete with remote manual control capabilities.
 
 ## Why This Project Exists
@@ -36,7 +38,6 @@ The official Dolphin app comes with several notable limitations for home automat
 
 - **Package Management**: uv
 
-
 #### Project Structure
 
 ```
@@ -69,29 +70,56 @@ Dolphin_Boiler_Monitor/
 
 ### Prerequisites
 
-Ensure you have `uv` installed for fast Python package and environment management.
+- **Python**: `3.10` or higher
+- **uv**: Fast Python package installer and resolver ([Installation Guide](https://github.com/astral-sh/uv#installation))
 
 ### Installation & Setup
 
-1. Clone the repository and navigate into the project directory:
+1. Clone this repository and navigate into the project directory:
 
 2. Install dependencies using uv:
 
-```Bash
-uv sync
-```
+   ```Bash
+   uv sync
+   ```
+
+3. Configure environment variables:
+
+- Copy the example environment file:
+
+  ```Bash
+  cp .env.example .env
+  ```
+
+- Retrieve your Dolphin API key using `curl` (replace with your account credentials) or Postman:
+  ```bash
+  curl --location 'https://api.dolphinboiler.com/HA/V1/getAPIkey.php' \
+    --form 'email="your_email@example.com"' \
+    --form 'password="your_password"'
+  ```
+- Open the newly created `.env` file and populate it with your credentials and the returned API key:
+
+  ```env
+  DOLPHIN_BASE_URL="https://api.dolphinboiler.com/HA/V1" #Leave this value
+  DOLPHIN_EMAIL="your_email@example.com"
+  DOLPHIN_DEVICE_NAME="your_device_name"
+  DOLPHIN_API_KEY="your_retrieved_api_key"
+
+  # Optional: Background polling interval in seconds (default: 120.0)
+  POLL_INTERVAL_SECONDS=120.0
+  ```
 
 ## Running the Application
 
-Start the development server with live reload enabled:
+- Start the development server with live reload enabled:
 
-```Bash
-uv run uvicorn app.main:app --reload
-```
+  ```Bash
+  uv run uvicorn app.main:app --reload
+  ```
 
-- API Docs (Swagger UI): Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser.
+* API Docs (Swagger UI): Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser.
 
-- Interactive ReDocs: Open [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc).
+* Interactive ReDocs: Open [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc).
 
 ## API Endpoints
 
@@ -112,8 +140,37 @@ uv run uvicorn app.main:app --reload
 
 ## Running Tests
 
-Execute the test suite using pytest:
+- Execute the test suite using pytest:
 
-```Bash
+  ```Bash
+  uv run pytest
+  ```
+
+- To run a test on the live Dolphin API:
+
+  ```Bash
+  uv run pytest -m live
+  ```
+
+## Continuous Integration & Quality Checks
+
+This project uses **GitHub Actions** to automatically run code quality checks and test suites on every `push` and prevents `pull_request` to the `main` branch until everything passes:
+
+- **Automated Testing**: Executes the `pytest` test suite against Python 3.10+ environments.
+
+- **Linting & Code Style**: Uses **Ruff** for ultra-fast Python linting, formatting, and import sorting.
+
+### Running Quality Checks Locally
+
+Before committing changes, you can run the exact same checks locally:
+
+```bash
+# Run pytest test suite
 uv run pytest
+
+# Check code for linting issues
+uv run ruff check .
+
+# Check code formatting
+uv run ruff format --check .
 ```
