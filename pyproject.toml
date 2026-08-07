@@ -33,7 +33,7 @@ markers = ["live: integration tests hitting real Dolphin API hardware"]
 # -m "not live": automatically ignore live tests during standard pytest execution
 # --cov=app: measures code coverage for the app/ directory
 # --cov-report=term-missing: shows missing line numbers in the terminal output
-addopts = "-v -m \"not live\" --cov=app --cov-report=term-missing"
+addopts = "-v -m \"not live\" --cov=app --cov-report=term-missing --cov-report=lcov:coverage.lcov"
 
 [tool.ruff.lint]
 # B008: Allow FastAPI Depends() calls in route parameters
