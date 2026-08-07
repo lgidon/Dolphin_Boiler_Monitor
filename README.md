@@ -1,7 +1,7 @@
 # Dolphin Boiler Monitor API
 
 [![CI Pipeline](https://github.com/lgidon/Dolphin_Boiler_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/<lgidon/Dolphin_Boiler_Monitor/actions)
-[![Coverage Status](https://coveralls.io/repos/github/lgidon/Dolphin_Boiler_Monitor/badge.svg?branch=main)](https://coveralls.io/github/lgidon/Dolphin_Boiler_Monitor?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/lgidon/Dolphin_Boiler_Monitor/badge.svg?branch=dev)](https://coveralls.io/github/lgidon/Dolphin_Boiler_Monitor?branch=dev)
 
 ![image](https://img.shields.io/badge/MIT-green?style=for-the-badge)
 
