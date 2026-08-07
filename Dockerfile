@@ -1,52 +1,54 @@
 # ==========================================
-# Stage 1: Dependency resolution stage
+# Stage 1: Export locked requirements
 # ==========================================
 FROM python:3.12-slim-bookworm AS builder
 
-# Copy uv binary directly from official Astral image
+# Copy uv binary
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /app
 
-# Copy dependency files first for layer caching
 COPY pyproject.toml uv.lock ./
 
+# Export locked dependencies to a temporary requirements file
+RUN uv export --frozen --no-dev -o requirements.txt
+
 # ==========================================
-# Stage 2: Final minimal runtime
+# Stage 2: Minimal runtime environment
 # ==========================================
 FROM python:3.12-slim-bookworm
 
-# Copy uv binary into runtime stage so we can install into system Python
+# Copy uv binary into runtime stage
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# Create non-privileged system user for security
+# Create non-privileged system user
 RUN groupadd -g 1000 appuser && \
     useradd -u 1000 -g appuser -s /bin/bash -m appuser
 
 WORKDIR /app
 
-# Copy dependency files from builder
-COPY --from=builder /app/pyproject.toml /app/uv.lock ./
+# Copy requirements from builder
+COPY --from=builder /app/requirements.txt .
 
-# Install locked production dependencies directly into system Python
+# Install locked requirements into system Python
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --system
+    uv pip install --system -r requirements.txt
 
-# Remove uv binary from final image now that dependencies are installed
-RUN rm /bin/uv /bin/uvx
+# Clean up uv binary and temporary files from final image
+RUN rm /bin/uv /bin/uvx requirements.txt
 
-# Copy remaining application source code
+# Copy application source code
 COPY . .
 
-# Ensure data directory exists with non-root ownership
+# Prepare data directory permissions
 RUN mkdir -p /app/data && chown -R appuser:appuser /app
 
-# Switch to non-root user
+# Switch context to non-root user
 USER appuser
 
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 
-# Start Uvicorn directly from system PATH
+# Execute Uvicorn from system PATH
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
