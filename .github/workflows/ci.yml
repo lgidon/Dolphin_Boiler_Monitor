@@ -77,6 +77,7 @@ jobs:
           echo 'DOLPHIN_API_KEY="your_api_key_here"' >> .env
           echo 'DOLPHIN_DEVICE_NAME="your_device_name"' >> .env
           echo 'POLL_INTERVAL_SECONDS=120.0' >> .env
+          echo 'TESTING=True' >> .env
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

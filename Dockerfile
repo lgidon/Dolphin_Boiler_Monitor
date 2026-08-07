@@ -18,6 +18,10 @@ RUN uv export --frozen --no-dev -o requirements.txt
 # ==========================================
 FROM python:3.12-slim-bookworm
 
+# Install curl for container health checks
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copy uv binary into runtime stage
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 

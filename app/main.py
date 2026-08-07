@@ -44,19 +44,29 @@ async def lifespan(app: FastAPI):
     # 1. Initialize SQLite DB tables on startup
     await init_db()
 
-    # 2. Start background worker
-    polling_task = asyncio.create_task(
-        background_polling_loop(interval_seconds=settings.POLL_INTERVAL_SECONDS)
-    )
+    polling_task = None
+
+    if settings.TESTING:
+        logger.info("TESTING=true detected. Skipping background polling loop.")
+    else:
+        logger.info(
+            f"Starting background polling loop (interval: {settings.POLL_INTERVAL_SECONDS}s)..."
+        )
+
+        # 2. Start background worker
+        polling_task = asyncio.create_task(
+            background_polling_loop(interval_seconds=settings.POLL_INTERVAL_SECONDS)
+        )
 
     yield
 
     # 3. Clean up on shutdown
-    polling_task.cancel()
-    try:
-        await polling_task
-    except asyncio.CancelledError:
-        pass
+    if polling_task:
+        polling_task.cancel()
+        try:
+            await polling_task
+        except asyncio.CancelledError:
+            pass
 
 
 app = FastAPI(
