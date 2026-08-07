@@ -4,7 +4,6 @@ import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi.openapi.docs import get_swagger_ui_html
 
 from app.client import DolphinAPIError, DolphinClient
@@ -75,17 +74,17 @@ Features:
 """,
     version="0.1.0",
     lifespan=lifespan,
-    docs_url=None
+    docs_url=None,
 )
+
 
 @app.get("/docs", include_in_schema=False)
 def custom_swagger_ui_html():
     return get_swagger_ui_html(
         openapi_url=app.openapi_url,
         title=app.title + " - Swagger UI",
-        swagger_ui_parameters={"initOAuth": {}}
+        swagger_ui_parameters={"initOAuth": {}},
     )
-
 
 
 # # Disable default /docs route when initializing FastAPI
