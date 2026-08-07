@@ -174,3 +174,15 @@ uv run ruff check .
 # Check code formatting
 uv run ruff format --check .
 ```
+
+## Development & Branching Workflow
+
+To maintain code quality and stability on `main`, the project enforces a structured git workflow using GitHub Actions:
+
+1. **Development Branching**: All new features and bug fixes must be developed on the `dev` branch (or feature branches created off `dev`). Direct pushes to `main` are strictly restricted.
+2. **Automated Verification**: When code is pushed to `dev`, GitHub Actions automatically executes:
+   - The `pytest` test suite.
+   - `ruff` linting and formatting validation.
+3. **Pull Request Policy**: Merging into `main` requires creating a Pull Request from `dev`. A PR can only be merged when:
+   - All automated tests, linting, and formatting checks pass.
+   - The code review is explicitly approved by the repository maintainer.
