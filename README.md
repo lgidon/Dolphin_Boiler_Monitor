@@ -1,6 +1,9 @@
 # Dolphin Boiler Monitor API
 
 [![CI Pipeline](https://github.com/lgidon/Dolphin_Boiler_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/<lgidon/Dolphin_Boiler_Monitor/actions)
+[![Coverage Status](https://coveralls.io/repos/github/lgidon/Dolphin_Boiler_Monitor/badge.svg?branch=main)](https://coveralls.io/github/lgidon/Dolphin_Boiler_Monitor?branch=main)
+
+![image](https://img.shields.io/badge/MIT-green?style=for-the-badge)
 
 A lightweight, asynchronous FastAPI service designed to poll, record, and expose telemetry data for smart home heaters, complete with remote manual control capabilities.
 
@@ -38,7 +41,7 @@ The official Dolphin app comes with several notable limitations for home automat
 
 - **Package Management**: uv
 
-#### Project Structure
+## Project Structure
 
 ```
 Dolphin_Boiler_Monitor/
@@ -61,6 +64,35 @@ Dolphin_Boiler_Monitor/
 │   └── test_telemetry.py    # Telemetry database & endpoint tests
 └── pyproject.toml
 ```
+
+## Architecture
+
+```mermaid
+flowchart LR
+
+    Dolphin[Dolphin Cloud API]
+
+    subgraph Monitor["Boiler Monitor Service"]
+        Poller[Background Poller]
+        API[FastAPI REST API]
+        DB[(SQLite)]
+    end
+
+    Dashboard[Dashboard / Future Client]
+    Other[Third-party Client]
+
+    Dolphin --> Poller
+    Poller --> DB
+
+    API --> DB
+
+    API -->|Control Commands| Dolphin
+
+    Dashboard --> API
+    Other --> API
+```
+
+The monitor separates telemetry collection from control operations. Historical and current status are served from the local database, while control requests are forwarded directly to the Dolphin Cloud API. This ensures low-latency command execution while keeping telemetry collection independent and resilient.
 
 #### Swagger UI:
 

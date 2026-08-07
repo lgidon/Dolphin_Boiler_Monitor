@@ -55,3 +55,8 @@ jobs:
           DOLPHIN_API_KEY: "dummy-ci-key-do-not-use"
           DOLPHIN_DEVICE_NAME: "ci-test-device"
         run: uv run pytest
+
+      - name: Upload Coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.lco
