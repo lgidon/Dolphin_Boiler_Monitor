@@ -1,6 +1,5 @@
 ![Dolphin Boiler Monitor](https://shieldcn.dev/header/gradient.svg?title=Dolphin+Boiler+Monitor&subtitle=A+lightweight+FastAPI+service+designed+to++collect+and+expose+telemetry+data+for+Dolphin+water+heater+controllers&logo=lu%3AHeater&logoColor=2a4b81&size=wide&mode=dark&font=geist)
 
-
 [![CI Pipeline](https://github.com/lgidon/Dolphin_Boiler_Monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/<lgidon/Dolphin_Boiler_Monitor/actions)
 [![Coverage Status](https://coveralls.io/repos/github/lgidon/Dolphin_Boiler_Monitor/badge.svg?branch=dev)](https://coveralls.io/github/lgidon/Dolphin_Boiler_Monitor?branch=dev)
 ![Last commit](https://www.shieldcn.dev/github/last-commit/lgidon/Dolphin_Boiler_Monitor.svg?variant=secondary&size=xs&mode=light&theme=gray&font=geist)
@@ -8,7 +7,6 @@
 ![Python versions](https://img.shields.io/badge/python-3.11%2B-blue)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![uv](https://img.shields.io/badge/uv-%23DE5FE9.svg?style=for-the-badge&logo=uv&logoColor=white)](https://github.com/astral-sh/uv)
-
 
 ## Why This Project Exists
 
@@ -135,13 +133,14 @@ The monitor separates telemetry collection from control operations. Historical a
 - Open the newly created `.env` file and populate it with your credentials and the returned API key:
 
   ```env
-  DOLPHIN_BASE_URL="https://api.dolphinboiler.com/HA/V1" #Leave this value
-  DOLPHIN_EMAIL="your_email@example.com"
-  DOLPHIN_DEVICE_NAME="your_device_name"
-  DOLPHIN_API_KEY="your_retrieved_api_key"
+  DOLPHIN_BASE_URL=https://api.dolphinboiler.com/HA/V1 #Leave this value
+  DOLPHIN_EMAIL=your_email@example.com
+  DOLPHIN_DEVICE_NAME=your_device_name
+  DOLPHIN_API_KEY=your_retrieved_api_key
 
   # Optional: Background polling interval in seconds (default: 120.0)
   POLL_INTERVAL_SECONDS=120.0
+  TESTING=False
   ```
 
 ## Running the Application
@@ -155,6 +154,81 @@ The monitor separates telemetry collection from control operations. Historical a
 * API Docs (Swagger UI): Open [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) in your browser.
 
 * Interactive ReDocs: Open [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc).
+
+## 🐳 Docker Deployment
+
+The project uses a multi-stage `Dockerfile` optimized for speed, security, and small image size using [`uv`](https://github.com/astral-sh/uv). The container runs as a non-root user and executes on a lightweight Debian runtime (`python:3.12-slim-bookworm`).
+
+---
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) or Docker Engine (v20.10+) with Docker Compose V2.
+
+---
+
+### 1. Configure Environment Variables
+
+Verify that the `.env` file exists and has the correct values.
+
+### 2. Run with Docker Compose
+
+#### Start the Container
+
+Build and start the service in detached mode:
+
+```Bash
+docker compose up -d --build
+```
+
+The FastAPI application will be accessible at:
+
+- API Documentation: http://localhost:8000/docs
+
+- Health Check: http://localhost:8000/docs
+
+#### View Logs
+
+```Bash
+docker compose logs -f dolphin-monitor
+```
+
+#### Stop the Container
+
+Stop and remove active containers and networks:
+
+```Bash
+docker compose down
+```
+
+3. Running in Testing / CI Mode
+   To run the container locally or in CI pipelines without triggering outbound live polling to the Dolphin API, set TESTING=true:
+
+```Bash
+TESTING=true docker compose up -d --build
+```
+
+Or pass it directly in your .env file:
+
+```Code snippet
+TESTING=true
+```
+
+4. Direct Docker Commands (Without Compose)
+   If you prefer building and running the image using plain Docker commands:
+
+```Bash
+# Build the image
+docker build -t dolphin-boiler-monitor:latest .
+
+# Run the container
+docker run -d \
+  --name dolphin_boiler_monitor \
+  -p 8000:8000 \
+  --env-file .env \
+  -v $(pwd)/data:/app/data \
+  dolphin-boiler-monitor:latest
+```
 
 ## API Endpoints
 

@@ -1,0 +1,43 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python virtual environments
+.venv
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test / coverage artifacts
+.pytest_cache
+.coverage
+coverage.*
+htmlcov/
+tests/
+
+# Local databases / runtime data
+*.db
+*.sqlite
+*.sqlite3
+data/
+logs/
+*.log
+
+# Documentation (not needed in image)
+README.md
+docs/
+LICENSE
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment secrets
+.env
+.env.*
+!.env.example
