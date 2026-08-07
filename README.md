@@ -98,11 +98,15 @@ Dolphin_Boiler_Monitor/
     --form 'password="your_password"'
   ```
 - Open the newly created `.env` file and populate it with your credentials and the returned API key:
+
   ```env
   DOLPHIN_BASE_URL="https://api.dolphinboiler.com/HA/V1" #Leave this value
   DOLPHIN_EMAIL="your_email@example.com"
   DOLPHIN_DEVICE_NAME="your_device_name"
   DOLPHIN_API_KEY="your_retrieved_api_key"
+
+  # Optional: Background polling interval in seconds (default: 120.0)
+  POLL_INTERVAL_SECONDS=120.0
   ```
 
 ## Running the Application

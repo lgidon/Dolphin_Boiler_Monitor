@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     dolphin_api_key: str
     dolphin_device_name: str
 
+    POLL_INTERVAL_SECONDS: float = 120.0  # Default fallback if not set in .env
+
     model_config = SettingsConfigDict(
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
